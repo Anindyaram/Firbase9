@@ -1,0 +1,21 @@
+{
+  "name": "firebase",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "Anindya Tripathi <64327113+Anindyaram@users.noreply.github.com>",
+  "license": "ISC",
+  "repository": "https://github.com/Anindyaram/Firbase9.git",
+  "devDependencies": {
+    "webpack": "^5.82.0",
+    "webpack-cli": "^5.1.0"
+  },
+  "dependencies": {
+    "firebase": "^9.21.0"
+  }
+}
