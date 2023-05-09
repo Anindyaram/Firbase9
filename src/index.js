@@ -6,6 +6,7 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  onSnapshot,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -25,7 +26,7 @@ const db = getFirestore();
 
 //collection ref
 const colRef = collection(db, "time");
-
+/*
 //get collection data
 getDocs(colRef)
   .then((snapshot) => {
@@ -38,6 +39,16 @@ getDocs(colRef)
   .catch((err) => {
     console.log(e.error);
   });
+*/
+//Real time data collection
+
+onSnapshot(colRef, (snapshop) => {
+  const time = [];
+  snapshop.docs.forEach((doc) => {
+    time.push({ ...doc.data(), id: doc.id });
+  });
+  console.log(time);
+});
 
 //adding documents
 const addTimeForm = document.querySelector(".add");
