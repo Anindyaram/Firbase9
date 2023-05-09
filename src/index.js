@@ -11,6 +11,8 @@ import {
   where,
   orderBy,
   serverTimestamp,
+  getDoc,
+  updateDoc,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -32,7 +34,11 @@ const db = getFirestore();
 const colRef = collection(db, "time");
 
 //quiery string where hour==1
-const q = query(colRef, where("title", "==", "Study"), orderBy("createdAt"));
+const q = query(
+  colRef,
+  /*where("title", "==", "Study"),*/
+  orderBy("createdAt")
+);
 
 /*
 //get collection data
@@ -83,5 +89,27 @@ deleteTimeForm.addEventListener("submit", (e) => {
 
   deleteDoc(docRef).then(() => {
     deleteTimeForm.reset();
+  });
+});
+
+//GETING single document from firebase
+
+const docRef = doc(db, "time", "cHeblabMCRsEOQ6kUSEw");
+
+onSnapshot(docRef, (doc) => {
+  console.log(doc.data(), doc.id);
+});
+
+//updating a document
+
+const updateForm = document.querySelector(".update");
+updateForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const docRef = doc(db, "time", updateForm.id.value);
+  updateDoc(docRef, {
+    title: "updated title",
+  }).then(() => {
+    updateForm.reset();
   });
 });
