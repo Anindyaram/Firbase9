@@ -14,6 +14,12 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCZDr2_R9l8bAtIpqy2ATKVQFdCjv19v54",
@@ -29,6 +35,7 @@ initializeApp(firebaseConfig);
 
 //init services
 const db = getFirestore();
+const auth = getAuth();
 
 //collection ref
 const colRef = collection(db, "time");
@@ -112,4 +119,48 @@ updateForm.addEventListener("submit", (e) => {
   }).then(() => {
     updateForm.reset();
   });
+});
+
+//Firebase Auth-signup user
+const signupForm = document.querySelector(".signup");
+signupForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = signupForm.email.value;
+  const password = signupForm.password.value;
+  createUserWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+      console.log("user created", cred.user);
+      signupForm.reset();
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+});
+
+//Logging Out
+const LogOutButton = document.querySelector(".LogOut");
+LogOutButton.addEventListener("click", (e) => {
+  e.preventDefault();
+  signOut(auth)
+    .then(() => {
+      console.log("User Logged Out");
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
+});
+
+const loginForm = document.querySelector(".login");
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const email = loginForm.email.value;
+  const password = loginForm.password.value;
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then((cred) => {
+      console.log("User Logged In", cred.user);
+    })
+    .catch((e) => {
+      console.log(e.message);
+    });
 });
