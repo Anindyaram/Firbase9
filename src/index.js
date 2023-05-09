@@ -17,6 +17,7 @@ import {
 import {
   createUserWithEmailAndPassword,
   getAuth,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
@@ -63,7 +64,7 @@ getDocs(colRef)
 */
 //Real time data collection
 
-onSnapshot(q, (snapshop) => {
+const unsubdata = onSnapshot(q, (snapshop) => {
   const time = [];
   snapshop.docs.forEach((doc) => {
     time.push({ ...doc.data(), id: doc.id });
@@ -103,7 +104,7 @@ deleteTimeForm.addEventListener("submit", (e) => {
 
 const docRef = doc(db, "time", "cHeblabMCRsEOQ6kUSEw");
 
-onSnapshot(docRef, (doc) => {
+const unsubDoc = onSnapshot(docRef, (doc) => {
   console.log(doc.data(), doc.id);
 });
 
@@ -163,4 +164,19 @@ loginForm.addEventListener("submit", (e) => {
     .catch((e) => {
       console.log(e.message);
     });
+});
+
+//subscribing on auth changes;
+const unsubAuth = onAuthStateChanged(auth, (user) => {
+  console.log("User Status Change:", user);
+});
+
+//Unsubscribing from changes
+const unsubButton = document.querySelector(".unsub");
+unsubButton.addEventListener("submit", (e) => {
+  e.preventDefault();
+  console.log("unsubscribing");
+  unsubAuth();
+  unsubDoc();
+  unsubDoc();
 });
