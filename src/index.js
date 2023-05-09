@@ -7,6 +7,10 @@ import {
   deleteDoc,
   doc,
   onSnapshot,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
 } from "firebase/firestore";
 
 const firebaseConfig = {
@@ -26,6 +30,10 @@ const db = getFirestore();
 
 //collection ref
 const colRef = collection(db, "time");
+
+//quiery string where hour==1
+const q = query(colRef, where("title", "==", "Study"), orderBy("createdAt"));
+
 /*
 //get collection data
 getDocs(colRef)
@@ -42,7 +50,7 @@ getDocs(colRef)
 */
 //Real time data collection
 
-onSnapshot(colRef, (snapshop) => {
+onSnapshot(q, (snapshop) => {
   const time = [];
   snapshop.docs.forEach((doc) => {
     time.push({ ...doc.data(), id: doc.id });
@@ -57,9 +65,10 @@ addTimeForm.addEventListener("submit", (e) => {
 
   //Takes two argument 1st is sollection reference 2nd is object which represent new document that we wanna add to the commlection
   addDoc(colRef, {
+    title: addTimeForm.title.value,
     hour: addTimeForm.hour.value,
     minutes: addTimeForm.minutes.value,
-    time: addTimeForm.time.value,
+    createdAt: serverTimestamp(),
   }).then(() => {
     addTimeForm.reset();
   });
